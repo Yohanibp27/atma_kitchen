@@ -30,7 +30,8 @@ const server = async () => {
     await db.authenticate();
     console.log("Database connected successfully");
 
-    await db.sync(); // membuat tabel berdasarkan model sequelize
+    // await db.sync(); // membuat tabel berdasarkan model sequelize
+    await db.sync({ alter: true }); // alter menyesuaikan struktur tabel dgn model, force menghapus tabel lalu membuat ulang
     console.log("All models synchronized successfully");
 
     app.listen(PORT, () => {

@@ -1,10 +1,5 @@
 import db from "../config/Database.js";
-import {
-  Role,
-  Permission,
-  RolePermission,
-  User,
-} from "../models/Associations.js";
+import { Role, Permission, RolePermission } from "../models/Associations.js";
 
 const rolesData = [
   {
@@ -349,7 +344,7 @@ const permissionsData = [
   },
 ];
 
-const rolePermission = {
+const rolePermissionsData = {
   // Owner memiliki seluruh permission
   Owner: [
     // permissionData.map((permission) => permission.name),
@@ -383,7 +378,7 @@ const rolePermission = {
     "order.create",
     "order.update",
     "order.cancel", // memungkinkan membatalkan jika sudah info ke customer
-    "oder.delete",
+    "order.delete",
 
     "payment.view",
     "payment.create",
@@ -418,7 +413,7 @@ const rolePermission = {
     "consignor.view",
     "consignor.create",
     "consignor.update",
-    "cosnignor.delete",
+    "consignor.delete",
 
     "payroll.view",
     "payroll.create",
@@ -523,7 +518,7 @@ const rolePermission = {
   Customer: [
     "product.view",
 
-    "oder.view",
+    "order.view",
     "order.create",
     "order.cancel", // memungkinkan membatalkan jika belum pembayaran
 
@@ -560,7 +555,9 @@ const seedDatabase = async () => {
     }
 
     // 3. menghubungkan role dengan permission
-    for (const [roleName, permissionNames] of Object.entries(rolePermission)) {
+    for (const [roleName, permissionNames] of Object.entries(
+      rolePermissionsData,
+    )) {
       const role = await Role.findOne({
         where: { name: roleName },
         transaction,
