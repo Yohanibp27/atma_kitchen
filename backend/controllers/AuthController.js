@@ -3,7 +3,6 @@ import {
   register as registerUser,
   login as loginUser,
 } from "../services/AuthService.js";
-import { authenticateToken } from "../middleware/AuthMiddleware.js";
 
 // named export: fungsi register dieskpor secara langsung tanpa object controller
 export const register = async (req, res) => {

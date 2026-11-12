@@ -10,6 +10,7 @@ import {
   User,
 } from "./models/Associations.js";
 import AuthRoutes from "./routes/AuthRoutes.js";
+import UserRoutes from "./routes/UserRoutes.js";
 
 dotenv.config();
 
@@ -45,5 +46,6 @@ const server = async () => {
 };
 
 app.use("/api/auth", AuthRoutes);
+app.use("/api/users/", UserRoutes);
 
 server();

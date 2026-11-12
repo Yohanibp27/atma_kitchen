@@ -8,12 +8,18 @@ import {
 } from "../models/Associations.js";
 import jwt from "jsonwebtoken";
 
-export const register = async ({ username, firstName, email, password }) => {
+export const register = async ({
+  username,
+  firstName,
+  lastName,
+  email,
+  password,
+}) => {
   // Validasi input
   if (!username) {
     throw new Error("Username wajib diisi!");
   } else if (!firstName) {
-    throw new Error("Nama depan wajib diisi");
+    throw new Error("Nama depan wajib diisi!");
   } else if (!email) {
     throw new Error("Email wajib diisi!");
   } else if (!password) {
