@@ -30,12 +30,9 @@ const User = db.define(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: [8, 50], // panjang karakter min 8 max 50
-        notEmpty: {
-          msg: "Password tidak boleh kosong",
-        },
-      },
+      //   validate: {
+      //     len: [8, 50], // panjang karakter min 8 max 50
+      //   },
     },
     roleId: {
       type: DataTypes.INTEGER,
