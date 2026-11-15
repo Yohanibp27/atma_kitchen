@@ -32,6 +32,10 @@ export const getUserById = async (id) => {
       attributes: ["id", "name"],
     },
   });
+
+  if (!user) {
+    throw new Error("User tidak ditemukan!");
+  }
   return user;
 };
 
@@ -196,5 +200,73 @@ export const deleteUser = async (id, requesterId) => {
     lastName: user.lastName,
     email: user.email,
     role: user.role.name,
+  };
+};
+
+export const assignRole = async (id, roleName, requesterId) => {
+  const requester = await User.findByPk(requesterId, {
+    include: {
+      model: Role,
+      as: "role",
+      attributes: ["id", "name"],
+    },
+  });
+  if (!requester) {
+    throw new Error("Akun pemohon tidak ditemukan!");
+  }
+
+  const user = await User.findByPk(id, {
+    include: {
+      model: Role,
+      as: "role",
+      attributes: ["id", "name"],
+    },
+  });
+  if (!user) {
+    throw new Error("Pengguna tidak ditemukan!");
+  }
+
+  if (Number(user.id) === Number(requesterId)) {
+    throw new Error("Anda tidak dapat mengubah role sendiri!");
+  }
+
+  const newRole = await Role.findOne({
+    where: { name: roleName },
+  });
+  if (!newRole) {
+    throw new Error("Role tujuan tidak ditemukan!");
+  }
+
+  if (requester.role.name === "Admin" && user.role.name === "Super Admin") {
+    throw new Error("Admin tidak dapat mengubah role Super Admin!");
+  }
+
+  if (newRole.name === "Super Admin" && requester.role.name !== "Super Admin") {
+    throw new Error(
+      "Hanya Super Admin yang dapat memberikan role Super Admin!",
+    );
+  }
+
+  if (user.role.name === "Super Admin" && newRole.name !== "Super Admin") {
+    const totalSuperAdmin = await User.count({
+      where: { roleId: user.roleId },
+    });
+    if (totalSuperAdmin <= 1) {
+      throw new Error("Role Super Admin terakhir tidak dapat diubah!");
+    }
+  }
+
+  user.roleId = newRole.id;
+  await user.save();
+  return {
+    id: user.id,
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    role: {
+      id: newRole.id,
+      name: newRole.name,
+    },
   };
 };

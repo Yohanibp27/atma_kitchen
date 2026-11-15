@@ -136,3 +136,36 @@ export const login = async ({ email, password }) => {
     },
   };
 };
+
+export const getCurrentUser = async (id) => {
+  const user = await User.findByPk(id, {
+    attributes: {
+      exclude: ["password"],
+    },
+    include: {
+      model: Role,
+      as: "role",
+      attributes: ["id", "name"],
+      include: {
+        model: Permission,
+        as: "permissions",
+        attributes: ["id", "name"],
+        through: {
+          attributes: [],
+        },
+      },
+    },
+  });
+
+  if (!user || !user.isActive) {
+    throw new Error("Akun tidak ditemukan atau tidak aktif!");
+  }
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    role: user.role,
+  };
+};

@@ -4,6 +4,7 @@ import {
   createUser as CreateUser,
   updateUser as UpdateUser,
   deleteUser as DeleteUser,
+  assignRole as AssignRole,
 } from "../services/UserService.js";
 
 export const getUsers = async (req, res) => {
@@ -34,7 +35,7 @@ export const getUsersById = async (req, res) => {
     }
 
     return res.status(200).json({
-      message: `Berhasil menggambil data ID pengguna ${id}`,
+      message: `Berhasil mengambil data ID pengguna ${id}`,
       data: user,
     });
   } catch (e) {
@@ -82,13 +83,45 @@ export const deleteUser = async (req, res) => {
     const requesterId = req.user.id;
     const user = await DeleteUser(id, requesterId);
     return res.status(200).json({
-      message: "Berhasil menghapus data pengguna!",
+      message: `Berhasil menghapus data pengguna ${id}!`,
       data: user,
     });
   } catch (e) {
     console.error("Delete user error:", e.message);
     return res.status(400).json({
       message: "Gagal menghapus data penggun!",
+    });
+  }
+};
+
+export const assignRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { roleName } = req.body;
+    // const roleName = req.body?.roleName;
+    const requesterId = req.user.id;
+
+    if (!roleName) {
+      return res.status(400).json({
+        message: "Role tujuan wajib diisi!",
+      });
+    }
+
+    const user = await AssignRole(id, roleName, requesterId);
+    return res.status(200).json({
+      message: "Berhasil mengubah role pengguna!",
+      data: user,
+    });
+  } catch (e) {
+    console.error("Assign user error:", e.message);
+    const statusCode =
+      e.message === "Pengguna tidak ditemukan!" ||
+      e.message === "Role tujuan tidak ditemukan!" ||
+      e.message === "Akun pemohon tidak ditemukan!"
+        ? 404
+        : 400;
+    return res.status(statusCode).json({
+      message: e.message,
     });
   }
 };
