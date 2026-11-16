@@ -146,7 +146,7 @@ const productsData = [
   },
   {
     categoryName: "Cake",
-    name: "Spikoe Per Loyang",
+    name: "Spikoe 1 Loyang",
     description: "Spikoe per loyang dengan ukuran 20x20",
     productOrigin: "own_production",
     productKind: "standard",
@@ -575,7 +575,7 @@ const seedDatabase = async () => {
 
         if (!consignor) {
           throw new Error(
-            `Consignor dengan email "${productData.consignorEmail}" tidak ditemukan.`,
+            `Consignor dengan email "${productData.consignorEmail}" tidak ditemukan!`,
           );
         }
         consignorId = consignor.id;
@@ -600,7 +600,7 @@ const seedDatabase = async () => {
       const product = productsByName.get(productVariantData.productName);
       if (!product) {
         throw new Error(
-          `Product "${productVariantData.productName}" tidak ditemukan.`,
+          `Product "${productVariantData.productName}" tidak ditemukan!`,
         );
       }
 

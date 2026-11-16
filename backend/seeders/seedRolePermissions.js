@@ -111,6 +111,24 @@ const permissionsData = [
     description: "Menghapus data produk",
   },
 
+  // Product Packaging
+  {
+    name: "product.packaging.view",
+    description: "Melihat aturan kebutuhan kemasan produk",
+  },
+  {
+    name: "product.packaging.create",
+    description: "Menambahkan aturan kebutuhan kemasan produk",
+  },
+  {
+    name: "product.packaging.update",
+    description: "Mengubah aturan kebutuhan kemasan produk",
+  },
+  {
+    name: "product.packaging.delete",
+    description: "Menghapus aturan kebutuhan kemasan produk",
+  },
+
   // Recipe
   {
     name: "recipe.view",
@@ -369,6 +387,11 @@ const rolePermissionsData = {
     "product.update",
     "product.delete",
 
+    "product.packaging.view",
+    "product.packaging.create",
+    "product.packaging.update",
+    "product.packaging.delete",
+
     "recipe.view",
     "recipe.create",
     "recipe.update",
@@ -443,6 +466,11 @@ const rolePermissionsData = {
     "product.create",
     "product.update",
     "product.delete",
+
+    "product.packaging.view",
+    "product.packaging.create",
+    "product.packaging.update",
+    "product.packaging.delete",
 
     "recipe.view",
     "recipe.create",

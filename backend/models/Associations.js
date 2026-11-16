@@ -1,11 +1,16 @@
 import Role from "../models/Role.js";
 import Category from "./Category.js";
 import Consignor from "./Consignor.js";
+import PackagingItem from "./PackagingItem.js";
 import Permission from "./Permission.js";
 import Product from "./Product.js";
 import ProductBundleItem from "./ProductBundleItem.js";
 import ProductCapacity from "./ProductCapacity.js";
+import ProductPackaging from "./ProductPackaging.js";
 import ProductVariant from "./ProductVariant.js";
+import RawMaterial from "./RawMaterial.js";
+import Recipe from "./Recipe.js";
+import RecipeItem from "./RecipeItem.js";
 import RolePermission from "./RolePermission.js";
 import User from "./User.js";
 
@@ -86,6 +91,56 @@ ProductBundleItem.belongsTo(ProductVariant, {
   as: "component",
 });
 
+// Product ↔ Recipe
+Product.hasMany(Recipe, {
+  foreignKey: "productId",
+  as: "recipes",
+}); // 1 Product : N Recipes
+Recipe.belongsTo(Product, {
+  foreignKey: "productId",
+  as: "product",
+}); // 1 Recipe : 1 Product
+
+// Recipe ↔ RecipeItem
+Recipe.hasMany(RecipeItem, {
+  foreignKey: "recipeId",
+  as: "recipe_items",
+}); // 1 Recipe : N RecipeItems
+RecipeItem.belongsTo(Recipe, {
+  foreignKey: "recipeId",
+  as: "recipe",
+}); // 1 RecipeItem : 1 Recipe
+
+// RecipeItem ↔ RawMaterial
+RawMaterial.hasMany(RecipeItem, {
+  foreignKey: "rawMaterialId",
+  as: "recipe_items",
+}); // 1 RawMaterial : N RecipeItems
+RecipeItem.belongsTo(RawMaterial, {
+  foreignKey: "rawMaterialId",
+  as: "raw_material",
+}); // 1 RecipeItem : 1 rawMaterial
+
+// PackagingItem ↔ ProductPackaging
+PackagingItem.hasMany(ProductPackaging, {
+  foreignKey: "packagingItemId",
+  as: "product_packagings",
+}); // 1 PackagingItem : N ProductPackagings
+ProductPackaging.belongsTo(PackagingItem, {
+  foreignKey: "packagingItemId",
+  as: "packaging_item",
+}); // 1 ProductPackaging : 1 PackagingItem
+
+// ProductVariant ↔ ProductPackaging
+ProductVariant.hasMany(ProductPackaging, {
+  foreignKey: "productVariantId",
+  as: "product_packagings",
+}); // 1 ProductVariant : N ProductPackagings
+ProductPackaging.belongsTo(ProductVariant, {
+  foreignKey: "productVariantId",
+  as: "product_variant",
+}); // 1 ProductPackaging : 1 ProductVariant
+
 export {
   Role,
   Permission,
@@ -97,4 +152,9 @@ export {
   ProductBundleItem,
   ProductCapacity,
   ProductVariant,
+  Recipe,
+  RecipeItem,
+  RawMaterial,
+  PackagingItem,
+  ProductPackaging,
 };

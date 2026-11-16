@@ -7,6 +7,7 @@ import {
   RolePermission,
 } from "../models/Associations.js";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "./../utils/SendEmail.js";
 
 export const register = async ({
   username,
@@ -167,5 +168,79 @@ export const getCurrentUser = async (id) => {
     firstName: user.firstName,
     lastName: user.lastName,
     role: user.role,
+  };
+};
+
+export const forgotPassword = async ({ email }) => {
+  if (!email) {
+    throw new Error("Email wajib diisi!");
+  }
+
+  const { JWT_RESET_SECRET, FRONTEND_URL } = process.env;
+  if (!JWT_RESET_SECRET) {
+    throw new Error("JWT_RESET_SECRET belum tersedia pada server!");
+  } else if (!FRONTEND_URL) {
+    throw new Error("FRONTEND_URL belum tersedia pada server!");
+  }
+
+  const user = await User.findOne({ where: { email } });
+  if (!user) {
+    throw new Error("Email tidak ditemukan!");
+  }
+
+  const resetToken = jwt.sign({ id: user.id }, JWT_RESET_SECRET, {
+    expiresIn: "15m",
+  });
+
+  const frontendUrl = FRONTEND_URL.replace(/\/$/, "");
+  const resetLink =
+    `${frontendUrl}/reset-password/` + encodeURIComponent(resetToken);
+
+  const subject = "Link Reset Password - Atma Kitchen";
+  const text = `Halo ${user.username},\nKami menerima permintaan untuk mengatur ulang password akun Atma Kitchen Anda.\nSilakan buka tautan berikut untuk mengatur ulang password Anda: ${resetLink}.\nTautan ini hanya berlaku selama 15 menit. Jika Anda tidak merasa melakukan permintaan ini, abaikan email ini.`;
+  await sendEmail(user.email, subject, text);
+  return {
+    message: "Email reset password berhasil dikirim!",
+  };
+};
+
+export const resetPassword = async ({ token, newPassword }) => {
+  if (!token || !newPassword) {
+    throw new Error("Token dan password baru wajib diisi!");
+  }
+
+  const { JWT_RESET_SECRET } = process.env;
+  if (!JWT_RESET_SECRET) {
+    throw new Error("JWT_RESET_SECRET belum tersedia pada server!");
+  }
+
+  if (typeof newPassword !== "string") {
+    throw new Error("Password harus berupa teks!");
+  } else if (newPassword.length < 8) {
+    throw new Error("Password minimal 8 karakter!");
+  }
+
+  let decoded;
+  try {
+    decoded = jwt.verify(token, JWT_RESET_SECRET);
+  } catch (e) {
+    if (e.name === "TokenExpiredError") {
+      throw new Error("Link reset password sudah kedaluwarsa!");
+    }
+    throw new Error("Token reset password tidak valid!");
+  }
+
+  const user = await User.findByPk(decoded.id);
+  if (!user) {
+    throw new Error("Pengguna tidak ditemukan!");
+  } else if (!user.isActive) {
+    throw new Error("Akun pengguna tidak aktif!");
+  }
+
+  const hasPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hasPassword;
+  await user.save();
+  return {
+    message: "Password berhasil diperbarui!",
   };
 };
