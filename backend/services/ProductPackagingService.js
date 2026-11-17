@@ -192,7 +192,7 @@ export const createProductPackaging = async ({
     throw new Error("Barang kemasan tidak ditemukan!");
   }
 
-  const newProductPackaging = await Product.create({
+  const newProductPackaging = await ProductPackaging.create({
     productVariantId,
     packagingItemId,
     usageScope,
@@ -276,7 +276,20 @@ export const updateProductPackaging = async (
 };
 
 export const deleteProductPackaging = async (id) => {
-  const productPackaging = await ProductPackaging.findByPk(id);
+  const productPackaging = await ProductPackaging.findByPk(id, {
+    include: [
+      {
+        model: ProductVariant,
+        as: "product_variant",
+        attributes: ["id", "variantName"],
+      },
+      {
+        model: PackagingItem,
+        as: "packaging_item",
+        attributes: ["id", "name"],
+      },
+    ],
+  });
   if (!productPackaging) {
     throw new Error("Kemasan produk tidak ditemukan!");
   }
@@ -284,8 +297,11 @@ export const deleteProductPackaging = async (id) => {
   await productPackaging.destroy();
   return {
     id: productPackaging.id,
-    productVariantId: productPackaging.productVariant.variantName,
-    packagingItemId: productPackaging.packagingItem.id,
+    // productVariantId: productPackaging.productVariant ? productPackaging.productPackaging.variantName : null,
+    // packagingItemId: productPackaging.packaging_Item?.id ?? null,
+    productVariantId: productPackaging.productVariantId,
+    packagingItemId: productPackaging.packagingItemId,
     quantity: productPackaging.quantity,
+    message: "Kemasan produk berhasil dihapus!",
   };
 };

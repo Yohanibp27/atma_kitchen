@@ -147,6 +147,24 @@ const permissionsData = [
     description: "Menghapus resep",
   },
 
+  // Raw Material
+  {
+    name: "raw.material.view",
+    description: "Melihat bahan mentah",
+  },
+  {
+    name: "raw.material.create",
+    description: "Menambah bahan mentah",
+  },
+  {
+    name: "raw.material.update",
+    description: "Mengubah bahan mentah",
+  },
+  {
+    name: "raw.material.delete",
+    description: "Menghapus bahan mentah",
+  },
+
   // Order
   {
     name: "order.view",
@@ -396,6 +414,11 @@ const rolePermissionsData = {
     "recipe.create",
     "recipe.update",
     "recipe.delete",
+
+    "raw.material.view",
+    "raw.material.create",
+    "raw.material.update",
+    "raw.material.delete",
 
     "order.view",
     "order.create",

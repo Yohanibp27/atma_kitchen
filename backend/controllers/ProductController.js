@@ -29,7 +29,7 @@ export const getProductById = async (req, res) => {
 
     if (!product) {
       return res.status(404).json({
-        message: "ID produk tidak ditemukan!",
+        message: `ID ${id} produk tidak ditemukan!`,
       });
     }
 
@@ -65,7 +65,7 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await UpdateProduct(id, re1.body);
+    const product = await UpdateProduct(id, req.body);
     return res.status(200).json({
       message: "Berhasil mengubah data produk!",
       data: product,

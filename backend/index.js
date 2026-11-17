@@ -13,6 +13,7 @@ import AuthRoutes from "./routes/AuthRoutes.js";
 import UserRoutes from "./routes/UserRoutes.js";
 import ProductRoutes from "./routes/ProductRoutes.js";
 import ProductPackagingRoutes from "./routes/ProductPackagingRoutes.js";
+import RawMaterialRoutes from "./routes/RawMaterialRoutes.js";
 
 dotenv.config();
 
@@ -48,8 +49,9 @@ const server = async () => {
 };
 
 app.use("/api/auth", AuthRoutes);
-app.use("/api/users/", UserRoutes);
-app.use("/api/products/", ProductRoutes);
-app.use("/api/product/packagings/", ProductPackagingRoutes);
+app.use("/api/users", UserRoutes);
+app.use("/api/products", ProductRoutes);
+app.use("/api/product/packagings", ProductPackagingRoutes);
+app.use("/api/raw/materials", RawMaterialRoutes);
 
 server();

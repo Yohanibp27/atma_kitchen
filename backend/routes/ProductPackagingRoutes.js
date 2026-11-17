@@ -3,6 +3,8 @@ import {
   getProductPackagings,
   getProductPackagingById,
   createProductPackaging,
+  updateProductPackaging,
+  deleteProductPackaging,
 } from "../controllers/ProductPackagingController.js";
 import { authenticateToken } from "../middleware/AuthMiddleware.js";
 import { authorizePermission } from "../middleware/AuthorizePermission.js";
@@ -31,11 +33,13 @@ router.put(
   "/:id",
   authenticateToken,
   authorizePermission("product.packaging.update"),
+  updateProductPackaging,
 );
 router.delete(
   "/:id",
   authenticateToken,
   authorizePermission("product.packaging.delete"),
+  deleteProductPackaging,
 );
 
 export default router;
