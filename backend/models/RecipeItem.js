@@ -9,11 +9,19 @@ const RecipeItem = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       field: "recipe_id",
+      references: {
+        model: "recipes",
+        key: "id",
+      },
     },
     rawMaterialId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       field: "raw_material_id",
+      references: {
+        model: "raw_materials",
+        key: "id",
+      },
     },
     quantity: {
       type: DataTypes.DECIMAL(12, 3),

@@ -1,8 +1,11 @@
 import Role from "../models/Role.js";
 import Category from "./Category.js";
 import Consignor from "./Consignor.js";
+import CustomerPoint from "./CustomerPoint.js";
+import Order from "./Order.js";
 import PackagingItem from "./PackagingItem.js";
 import Permission from "./Permission.js";
+import PointTransaction from "./PointTransaction.js";
 import Product from "./Product.js";
 import ProductBundleItem from "./ProductBundleItem.js";
 import ProductCapacity from "./ProductCapacity.js";
@@ -61,7 +64,7 @@ Product.hasMany(ProductVariant, {
 }); // 1 Product : N ProductVariants
 ProductVariant.belongsTo(Product, { foreignKey: "productId", as: "product" }); // 1 ProductVariant : 1 product
 
-// ProductVariant ↔ ProductCapacity
+// ProductVariant ↔ ProductCapacity (One to Many)
 ProductVariant.hasMany(ProductCapacity, {
   foreignKey: "productVariantId",
   as: "product_capacities",
@@ -91,7 +94,7 @@ ProductBundleItem.belongsTo(ProductVariant, {
   as: "component",
 });
 
-// Product ↔ Recipe
+// Product ↔ Recipe (One to Many)
 Product.hasMany(Recipe, {
   foreignKey: "productId",
   as: "recipes",
@@ -101,7 +104,7 @@ Recipe.belongsTo(Product, {
   as: "product",
 }); // 1 Recipe : 1 Product
 
-// Recipe ↔ RecipeItem
+// Recipe ↔ RecipeItem (One to Many)
 Recipe.hasMany(RecipeItem, {
   foreignKey: "recipeId",
   as: "recipe_items",
@@ -111,7 +114,7 @@ RecipeItem.belongsTo(Recipe, {
   as: "recipe",
 }); // 1 RecipeItem : 1 Recipe
 
-// RecipeItem ↔ RawMaterial
+// RecipeItem ↔ RawMaterial (One to Many)
 RawMaterial.hasMany(RecipeItem, {
   foreignKey: "rawMaterialId",
   as: "recipe_items",
@@ -121,7 +124,7 @@ RecipeItem.belongsTo(RawMaterial, {
   as: "raw_material",
 }); // 1 RecipeItem : 1 rawMaterial
 
-// PackagingItem ↔ ProductPackaging
+// PackagingItem ↔ ProductPackaging (One to Many)
 PackagingItem.hasMany(ProductPackaging, {
   foreignKey: "packagingItemId",
   as: "product_packagings",
@@ -131,7 +134,7 @@ ProductPackaging.belongsTo(PackagingItem, {
   as: "packaging_item",
 }); // 1 ProductPackaging : 1 PackagingItem
 
-// ProductVariant ↔ ProductPackaging
+// ProductVariant ↔ ProductPackaging (One to Many)
 ProductVariant.hasMany(ProductPackaging, {
   foreignKey: "productVariantId",
   as: "product_packagings",
@@ -140,6 +143,47 @@ ProductPackaging.belongsTo(ProductVariant, {
   foreignKey: "productVariantId",
   as: "product_variant",
 }); // 1 ProductPackaging : 1 ProductVariant
+
+// User ↔ CustomerPoint (One to One)
+User.hasOne(CustomerPoint, {
+  //   foreignKey: "userId",
+  foreignKey: "userId",
+  as: "customer_point",
+}); // 1 User : 1 CustomerPoint
+CustomerPoint.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+}); // 1 CustomerPoint : 1 User
+
+// User ↔  PointTransaction (One to Many)
+User.hasMany(PointTransaction, {
+  foreignKey: "userId",
+  as: "point_transactions",
+}); // 1 User : N PointTransactions
+PointTransaction.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+}); // 1 PointTransaction : 1 User
+
+// user ↔ Order (One to Many)
+User.hasMany(Order, {
+  foreignKey: "userId",
+  as: "orders",
+}); // 1 User : N Orders
+Order.belongsTo(User, {
+  foreignKey: "userId",
+  as: "users",
+}); // 1 Order : 1 Users
+
+// Order ↔ PointTransaction (One to Many)
+Order.hasMany(PointTransaction, {
+  foreignKey: "orderId",
+  as: "point_transactions",
+}); // 1 Order : N PointTransactions
+PointTransaction.belongsTo(Order, {
+  foreignKey: "orderId",
+  as: "order",
+}); // 1 PointTransaction : 1 Order
 
 export {
   Role,
@@ -157,4 +201,6 @@ export {
   RawMaterial,
   PackagingItem,
   ProductPackaging,
+  CustomerPoint,
+  PointTransaction,
 };

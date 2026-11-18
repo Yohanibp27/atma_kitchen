@@ -9,6 +9,10 @@ const ProductCapacity = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       field: "product_variant_id",
+      references: {
+        model: "product_variants",
+        key: "id",
+      },
     },
     date: {
       type: DataTypes.DATEONLY,

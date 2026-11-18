@@ -9,11 +9,19 @@ const ProductBundleItem = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       field: "bundle_variant_id",
+      references: {
+        model: "product_variants",
+        key: "id",
+      },
     },
     componentVariantId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       field: "component_variant_id",
+      references: {
+        model: "product_variants",
+        key: "id",
+      },
     },
     quantity: {
       type: DataTypes.INTEGER,

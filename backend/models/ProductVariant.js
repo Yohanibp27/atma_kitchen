@@ -9,6 +9,10 @@ const ProductVariant = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       field: "product_id",
+      references: {
+        model: "products",
+        key: "id",
+      },
     },
     variantName: {
       type: DataTypes.STRING,

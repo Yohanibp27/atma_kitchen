@@ -9,11 +9,19 @@ const Product = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       field: "category_id",
+      references: {
+        model: "categories",
+        key: "id",
+      },
     },
     consignorId: {
       type: DataTypes.INTEGER,
       allowNull: true,
       field: "consignor_id",
+      references: {
+        model: "consignors",
+        key: "id",
+      },
     },
     name: {
       type: DataTypes.STRING,
