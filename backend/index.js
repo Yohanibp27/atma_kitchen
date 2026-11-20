@@ -11,6 +11,10 @@ import {
 } from "./models/Associations.js";
 import AuthRoutes from "./routes/AuthRoutes.js";
 import UserRoutes from "./routes/UserRoutes.js";
+import RolesRoutes from "./routes/RoleRoutes.js";
+import PermissionRoutes from "./routes/PermissionRoutes.js";
+import ProfileRoutes from "./routes/ProfileRoutes.js";
+import DashboardRoutes from "./routes/DashboardRoutes.js";
 import ProductRoutes from "./routes/ProductRoutes.js";
 import ProductPackagingRoutes from "./routes/ProductPackagingRoutes.js";
 import RawMaterialRoutes from "./routes/RawMaterialRoutes.js";
@@ -50,6 +54,10 @@ const server = async () => {
 
 app.use("/api/auth", AuthRoutes);
 app.use("/api/users", UserRoutes);
+app.use("/api/roles", RolesRoutes);
+app.use("/api/permissions", PermissionRoutes);
+app.use("/api/profile", ProfileRoutes);
+app.use("/api/dashboard", DashboardRoutes);
 app.use("/api/products", ProductRoutes);
 app.use("/api/product/packagings", ProductPackagingRoutes);
 app.use("/api/raw/materials", RawMaterialRoutes);

@@ -74,6 +74,10 @@ const permissionsData = [
     name: "role.delete",
     description: "Menghapus data role",
   },
+  {
+    name: "role.manage_permissions",
+    description: "Mengatur permission yang dimiliki oleh role",
+  },
 
   // Permission
   {
@@ -394,6 +398,7 @@ const rolePermissionsData = {
     "role.create",
     "role.update",
     "role.delete",
+    "role.manage_permissions",
 
     "permission.view",
     "permission.create",

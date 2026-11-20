@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 import { authenticateToken } from "../middleware/AuthMiddleware.js";
 import { authorizePermission } from "../middleware/AuthorizePermission.js";
 import {

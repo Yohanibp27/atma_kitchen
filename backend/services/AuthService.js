@@ -15,6 +15,7 @@ export const register = async ({
   lastName,
   email,
   password,
+  birthDate,
 }) => {
   // Validasi input
   if (!username) {
@@ -23,6 +24,8 @@ export const register = async ({
     throw new Error("Nama depan wajib diisi!");
   } else if (!email) {
     throw new Error("Email wajib diisi!");
+  } else if (!birthDate) {
+    throw new Error("Tanggal lahir wajib diisi!");
   } else if (!password) {
     throw new Error("Password wajib diisi!");
   }
@@ -42,6 +45,27 @@ export const register = async ({
   });
   if (existingEmail) {
     throw new Error("Email sudah digunakan!");
+  }
+
+  // Validasi tanggal lahir
+  if (typeof birthDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) {
+    throw new Error("Tanggal lahir harus menggunakan format YYYY-MM-DD!");
+  }
+
+  const parsedBirthDate = new Date(`${birthDate}T00:00:00.000Z`);
+  if (
+    Number.isNaN(parsedBirthDate.getTime()) ||
+    parsedBirthDate.toISOString().slice(0, 10) !== birthDate
+  ) {
+    throw new Error("Tanggal lahir tidak valid!");
+  }
+
+  const now = new Date();
+  const today =
+    `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-` +
+    String(now.getDate()).padStart(2, "0");
+  if (birthDate > today) {
+    throw new Error("Tanggal lahir tidak boleh di masa depan!");
   }
 
   // Validasi panjang password
@@ -65,6 +89,7 @@ export const register = async ({
     firstName,
     lastName,
     email,
+    birthDate,
     password: passwordHash,
     roleId: defaultRole.id,
   });
@@ -74,6 +99,7 @@ export const register = async ({
     username: newUser.username,
     firstName: newUser.firstName,
     lastName: newUser.lastName,
+    birthDate: newUser.birthDate,
     email: newUser.email,
     roleId: newUser.roleId,
   };
